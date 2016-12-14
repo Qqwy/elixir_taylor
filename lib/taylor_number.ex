@@ -21,6 +21,7 @@ defmodule TaylorNumber do
   end
 
 
+
 end
 
 defimpl Inspect, for: TaylorNumber do
