@@ -45,7 +45,7 @@ defmodule Taylor do
   def const do
     new(fn
       x, 0 -> x
-      _, n -> 0
+      _, _n -> 0
     end,
     fn x -> x end)
   end
@@ -64,6 +64,15 @@ defmodule Taylor do
     new(fn x, n ->
       N.mult(N.div(N.pow(Decimal.new(-1), n), Math.factorial(2 * n)), N.pow(x, 2 * n))
     end, fn x -> "cos(#{x})" end)
+  end
+
+  def compose(outer = %__MODULE__{}, inner = %__MODULE__{}) do
+    new(
+      fn x, n ->
+        inner.function.(x, n)
+        |> outer.function.(n)
+      end,
+      fn x -> outer.name.("(#{inner.name.(x)})") end)
   end
 end
 
